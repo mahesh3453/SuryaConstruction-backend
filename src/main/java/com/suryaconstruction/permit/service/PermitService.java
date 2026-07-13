@@ -90,6 +90,22 @@ public class PermitService {
         PermitEntry entry = permitEntryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Permit entry not found with id: " + id));
 
+        LocalDate targetDate = dto.getEntryDate() != null ? dto.getEntryDate() : entry.getEntryDate();
+        Long employeeId = entry.getEmployee().getId();
+
+        Optional<PermitEntry> existingOpt = permitEntryRepository.findByEmployeeIdAndEntryDate(employeeId, targetDate);
+
+        if (existingOpt.isPresent() && !existingOpt.get().getId().equals(id)) {
+            PermitEntry existing = existingOpt.get();
+            existing.setHotWorkActivity(dto.getHotWorkActivity());
+            existing.setHeightWorkActivity(dto.getHeightWorkActivity());
+            existing.setGeneralWorkActivity(dto.getGeneralWorkActivity());
+            existing.setManpowerNames(dto.getManpowerNames());
+            permitEntryRepository.delete(entry);
+            PermitEntry saved = permitEntryRepository.save(existing);
+            return convertToDto(saved);
+        }
+
         entry.setHotWorkActivity(dto.getHotWorkActivity());
         entry.setHeightWorkActivity(dto.getHeightWorkActivity());
         entry.setGeneralWorkActivity(dto.getGeneralWorkActivity());
