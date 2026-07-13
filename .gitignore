@@ -1,0 +1,21 @@
+# Maven build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+
+# Local Environment files
+.env
+.env.local
+
+# Local Maven binaries
+maven/
+maven.zip
+
+# OS files
+Thumbs.db
+.DS_Store
