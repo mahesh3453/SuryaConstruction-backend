@@ -6,7 +6,8 @@ server:
       cookie:
         name: SURYA_SESSION
         http-only: true
-        same-site: lax
+        same-site: ${SESSION_COOKIE_SAME_SITE:lax}
+        secure: ${SESSION_COOKIE_SECURE:false}
         max-age: 1800s
 
 cors:
